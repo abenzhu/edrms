@@ -1,6 +1,6 @@
 """主程序入口"""
 import sys
-from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QToolBar, QStatusBar, QMessageBox, QInputDialog, QLineEdit, QPushButton, QLabel, QFrame
+from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QToolBar, QStatusBar, QMessageBox, QInputDialog, QLineEdit, QPushButton, QLabel, QFrame, QDialog
 from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QAction, QFont, QIcon
 
@@ -8,7 +8,7 @@ from config.config import config_manager
 from database.db_manager import db_manager
 
 
-class LoginWindow(QWidget):
+class LoginWindow(QDialog):
     """登录窗口"""
     
     def __init__(self):
@@ -42,7 +42,7 @@ class LoginWindow(QWidget):
         button_layout.addWidget(ok_button)
         
         cancel_button = QPushButton("取消")
-        cancel_button.clicked.connect(self.close)
+        cancel_button.clicked.connect(self.reject)
         button_layout.addWidget(cancel_button)
         
         layout.addLayout(button_layout)
@@ -64,9 +64,7 @@ class LoginWindow(QWidget):
     
     def accept_login(self):
         """接受登录"""
-        self.close()
-        # 这里应该返回True或触发主窗口显示
-        self.login_accepted = True
+        self.accept()
 
 
 class MainWindow(QMainWindow):
@@ -293,10 +291,9 @@ def main():
     
     # 创建登录窗口
     login_window = LoginWindow()
-    login_window.show()
     
     # 显示登录窗口并等待登录
-    if login_window.exec() == LoginWindow.Accepted:
+    if login_window.exec() == QDialog.Accepted:
         # 登录成功，显示主窗口
         main_window = MainWindow()
         main_window.show()
